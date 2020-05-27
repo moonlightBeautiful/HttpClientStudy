@@ -1,7 +1,35 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://java.sun.com/xml/ns/javaee"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         id="WebApp_ID" version="2.5">
+    <display-name>Archetype Created Web Application</display-name>
+
+    <!-- 上传、下载 begin-->
+    <servlet>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>com.ims.c06uploadAndDownload.UploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/uploadFiles</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>ListFilesServlet</servlet-name>
+        <servlet-class>com.ims.c06uploadAndDownload.ListFilesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListFilesServlet</servlet-name>
+        <url-pattern>/listFiles</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>DownLoadServlet</servlet-name>
+        <servlet-class>com.ims.c06uploadAndDownload.DownLoadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DownLoadServlet</servlet-name>
+        <url-pattern>/downloadFiles</url-pattern>
+    </servlet-mapping>
+    <!-- 上传、下载 end-->
 </web-app>

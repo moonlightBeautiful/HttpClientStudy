@@ -13,17 +13,24 @@ import java.io.InputStream;
 public class HttpClient {
 
     public static void main(String[] args) throws Exception {
-        CloseableHttpClient httpClient = HttpClients.createDefault(); // 创建httpClient实例
-        HttpGet httpGet = new HttpGet("http://www.java1234.com/gg/dljd4.gif"); // 创建httpget实例
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");// 模拟火狐浏览器
-        CloseableHttpResponse response = httpClient.execute(httpGet); // 执行http get请求
-        HttpEntity entity = response.getEntity(); // 获取返回实体
+        // 创建httpClient实例
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        // 创建httpget实例
+        HttpGet httpGet = new HttpGet("http://www.java1234.com/gg/dljd4.gif");
+        // 模拟火狐浏览器
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");
+        // 执行http get请求
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        // 获取返回实体
+        HttpEntity entity = response.getEntity();
         if (entity != null) {
-            System.out.println("ContentType:" + entity.getContentType().getValue()); // 获取返回实体类型
+            // 获取返回实体类型
+            System.out.println("ContentType:" + entity.getContentType().getValue());
             InputStream inputStream = entity.getContent();
-            FileUtils.copyToFile(inputStream, new File("C://dljd4.gif"));
+            FileUtils.copyToFile(inputStream, new File("ljd4.gif"));
         }
-        response.close(); // response关闭
-        httpClient.close(); // httpClient关闭
+        // 释放资源
+        response.close();
+        httpClient.close();
     }
 }

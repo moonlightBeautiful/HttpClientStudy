@@ -12,18 +12,26 @@ import org.apache.http.util.EntityUtils;
 public class HttpClient {
 
     public static void main(String[] args) throws Exception {
-        CloseableHttpClient httpClient = HttpClients.createDefault(); // 创建httpClient实例
-        HttpGet httpGet = new HttpGet("https://mvnrepository.com/"); // 创建httpget实例
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpGet = new HttpGet("https://mvnrepository.com/");
+
+        // 设置连接超时时间 10秒钟 读取超时时间 10秒钟
         RequestConfig config = RequestConfig.custom()
-                .setConnectTimeout(10000) // 设置连接超时时间 10秒钟
-                .setSocketTimeout(10000) // 设置读取超时时间10秒钟
+                .setConnectTimeout(10000)
+                .setSocketTimeout(10000)
                 .build();
+
         httpGet.setConfig(config);
-        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");// 模拟火狐浏览器
-        CloseableHttpResponse response = httpClient.execute(httpGet); // 执行http get请求
-        HttpEntity entity = response.getEntity(); // 获取返回实体
-        System.out.println("网页内容：" + EntityUtils.toString(entity, "utf-8")); // 获取网页内容
-        response.close(); // response关闭
-        httpClient.close(); // httpClient关闭
+        // 模拟火狐浏览器
+        httpGet.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");
+        // 执行http get请求
+        CloseableHttpResponse response = httpClient.execute(httpGet);
+        // 获取返回实体
+        HttpEntity entity = response.getEntity();
+        // 获取网页内容
+        System.out.println("网页内容：" + EntityUtils.toString(entity, "utf-8"));
+        // 释放资源
+        response.close();
+        httpClient.close();
     }
 }
