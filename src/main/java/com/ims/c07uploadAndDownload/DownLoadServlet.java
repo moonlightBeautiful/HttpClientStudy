@@ -41,20 +41,20 @@ public class DownLoadServlet extends HttpServlet {
         int dir1 = hashcode & 0xf;  //0--15
         int dir2 = (hashcode & 0xf0) >> 4;  //0-15
         String path = fileSaveRootPath + "\\" + dir1 + "\\" + dir2;  //upload\2\3  upload\3\5
-        //得到要下载的文件
+        //本地要下载的文件
         File file = new File(path + "\\" + fileName);
-        //如果文件不存在
         if (!file.exists()) {
             response.addHeader("message", "文件不存在！");
             return;
         }
-        //处理文件名
-        //String realname = fileName.substring(fileName.indexOf("_") + 1);
-        //读取要下载的文件，保存到文件输入流
+        //处理文件名 String realname = fileName.substring(fileName.indexOf("_") + 1);
+        //把本地要下载的文件读取到文件输入流
         inputStream = new FileInputStream(file);
-        //创建输出流
+        //返回文件数据
         outputStream = response.getOutputStream();
-        response.addHeader("message", URLEncoder.encode("下载文件成功！","utf-8"));       //必须在IOUtils.copy(inputStream, outputStream);    之前
+        //返回文本数据   必须在IOUtils.copy(inputStream, outputStream);    之前
+        response.addHeader("message", URLEncoder.encode("下载文件成功！", "utf-8"));
+
         IOUtils.copy(inputStream, outputStream);
         outputStream.flush();
         IOUtils.closeQuietly(inputStream);

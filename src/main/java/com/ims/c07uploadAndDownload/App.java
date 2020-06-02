@@ -31,7 +31,7 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.UUID;
 
-public class HttpClient {
+public class App {
 
     /**
      * 请求上传
@@ -64,8 +64,9 @@ public class HttpClient {
                     // fieldName = item.getFieldName();
                     // fieldName = new String(fieldName.getBytes("gbk"), "utf-8");
                     System.out.println("文件字段，fieldName：" + fieldName);
-                    System.out.println("httpClien模拟请求下载文件开始");
 
+
+                    System.out.println("httpClient模拟浏览器请求上传文件开始=================================");
                     // 创建httpClient实例
                     CloseableHttpClient httpClient = HttpClients.createDefault();
                     // 创建httpPost实例
@@ -75,28 +76,24 @@ public class HttpClient {
                             .setSocketTimeout(10000)
                             .build();
                     httpPost.setConfig(config);
-                    // 模拟火狐浏览器
                     httpPost.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:50.0) Gecko/20100101 Firefox/50.0");
-                    //创建MultipartEntityBuilder实例，
+                    //入参相关↓
                     MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
                     entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
                     entityBuilder.setCharset(Charset.forName("utf-8"));
                     ContentBody body = new InputStreamBody(stream, fieldName);
                     /*reqEntity.addPart("file", new FileBody(file));*/
-                    entityBuilder.addPart(UUID.randomUUID().toString(), body);
-                    entityBuilder.addTextBody("TextBody", "TextBody");
-                    //创建HttpEntity实例，
+                    entityBuilder.addPart(UUID.randomUUID().toString(), body); //文件参数
+                    entityBuilder.addTextBody("fileName", fieldName);  //文件参数
                     HttpEntity httpEntity = entityBuilder.build();
                     httpPost.setEntity(httpEntity);
-                    //执行httpPost请求
+                    //入参相关↑
                     CloseableHttpResponse response = httpClient.execute(httpPost);
-                    //获取返回实体
                     HttpEntity entity = response.getEntity();
                     result = EntityUtils.toString(entity, "utf-8");
-                    // response关闭
                     response.close();
-                    // httpClient关闭
                     httpClient.close();
+                    System.out.println("httpClient模拟浏览器请求上传文件结束=================================");
                 }
             }
             return result;
@@ -121,31 +118,28 @@ public class HttpClient {
         OutputStream outputStream = null;
         InputStream inputStream = null;
 
-        // 创建httpClient实例
+        System.out.println("httpClient模拟浏览器请求下载文件开始=================================");
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        // 创建httpGet实例
         HttpGet httpGet = new HttpGet("http://localhost:8080/HttpClientStudy/downloadFiles");
-        httpGet.addHeader("fileName", URLEncoder.encode(fileName, "utf-8"));
+        httpGet.addHeader("fileName", URLEncoder.encode(fileName, "utf-8")); //get方式参数+头上
         RequestConfig config = RequestConfig.custom()
                 .setConnectTimeout(10000)
                 .setSocketTimeout(10000)
                 .build();
         httpGet.setConfig(config);
-        //执行httpPost获取CloseableHttpResponse响应
-        CloseableHttpResponse closeableHttpResponse = httpClient.execute(httpGet);
-        HttpEntity entity = closeableHttpResponse.getEntity();
-        inputStream = entity.getContent();
-        result = URLDecoder.decode(closeableHttpResponse.getFirstHeader("message").getValue(), "UTF-8");
+        CloseableHttpResponse response1 = httpClient.execute(httpGet);
+        HttpEntity entity = response1.getEntity();
+        inputStream = entity.getContent();  //返回的文件
+        result = URLDecoder.decode(response1.getFirstHeader("message").getValue(), "UTF-8");    //返回的文本
         outputStream = httpServletResponse.getOutputStream();
         httpServletResponse.reset();
         httpServletResponse.setContentType("application/x-download; charset=UTF-8");
         httpServletResponse.addHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(fileName.substring(fileName.lastIndexOf("_") + 1),
                 "utf-8"));
-
         IOUtils.copy(inputStream, outputStream);
         IOUtils.closeQuietly(inputStream);
         IOUtils.closeQuietly(outputStream);
+        System.out.println("httpClient模拟浏览器请求下载文结束=================================");
         return result;
-
     }
 }
