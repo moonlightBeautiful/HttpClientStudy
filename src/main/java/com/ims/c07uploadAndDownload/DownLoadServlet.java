@@ -1,4 +1,4 @@
-package com.ims.c06uploadAndDownload;
+package com.ims.c07uploadAndDownload;
 
 import org.apache.commons.io.IOUtils;
 

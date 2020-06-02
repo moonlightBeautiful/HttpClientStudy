@@ -1,4 +1,4 @@
-<%@ page import="com.ims.c06uploadAndDownload.HttpClient" %>
+<%@ page import="com.ims.c07uploadAndDownload.HttpClient" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%
